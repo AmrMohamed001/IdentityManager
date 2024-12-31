@@ -4,5 +4,19 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
+    @if (User.Identity.IsAuthenticated)
+    {
+
+        var TwoFEnable = ViewData["TwoFEnable"];
+        if (TwoFEnable != null && TwoFEnable.ToString().ToLower() == "true")
+        {
+            <a asp-action="DisableAuthenticator" asp-controller="auth">Disable your 2FA</a>
+        }
+        else
+        {
+            <a asp-action="EnableAuthenticator" asp-controller="auth">Setup your 2FA</a>
+        }
+        
+    }
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>

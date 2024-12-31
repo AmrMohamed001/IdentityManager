@@ -1,0 +1,37 @@
+﻿@model Role_Identity.Models.ViewModels.TwoFactorAuthViewModel
+
+@{
+    ViewData["Title"] = "EnableAuthenticator";
+}
+
+<h1>EnableAuthenticator</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EnableAuthenticator" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <p class="text-center">Enter the code below in your authenticator App</p>
+                <p class="text-center">@Model.Token</p>
+            </div>
+            <div class="form-group">
+                <label asp-for="Code" class="control-label"></label>
+                <input asp-for="Code" class="form-control" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to Home</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
