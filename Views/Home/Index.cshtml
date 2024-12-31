@@ -10,11 +10,11 @@
         var TwoFEnable = ViewData["TwoFEnable"];
         if (TwoFEnable != null && TwoFEnable.ToString().ToLower() == "true")
         {
-            <a asp-action="DisableAuthenticator" asp-controller="auth">Disable your 2FA</a>
+            <a asp-action="DisableAuthenticator" asp-controller="account">Disable your 2FA</a>
         }
         else
         {
-            <a asp-action="EnableAuthenticator" asp-controller="auth">Setup your 2FA</a>
+            <a asp-action="EnableAuthenticator" asp-controller="account">Setup your 2FA</a>
         }
         
     }

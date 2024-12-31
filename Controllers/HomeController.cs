@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Role_Identity.Models;
@@ -23,7 +24,7 @@ namespace Role_Identity.Controllers
             else ViewData["TwoFEnable"] = user.TwoFactorEnabled;
             return View();
         }
-
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();

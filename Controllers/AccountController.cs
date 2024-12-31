@@ -10,14 +10,14 @@ using System.Net.Mail;
 
 namespace Role_Identity.Controllers
 {
-    public class AuthController : Controller
+    public class AccountController : Controller
     {
 
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IEmailSender emailSender;
 
-        public AuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -100,15 +100,15 @@ namespace Role_Identity.Controllers
         }
 
         [HttpGet]
-        public IActionResult SignIn(string returnurl = null)
+        public IActionResult Login(string returnurl = null)
         {
             ViewData["returnurl"] = returnurl;
-            return View("SignIn");
+            return View("Login");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SignIn(LoginViewModel model, string returnurl = null)
+        public async Task<IActionResult> Login(LoginViewModel model, string returnurl = null)
         {
             ViewData["returnurl"] = returnurl;
             returnurl = returnurl ?? Url.Content("~/");
@@ -122,10 +122,10 @@ namespace Role_Identity.Controllers
                 else
                 {
                     ModelState.AddModelError("", "Email or password is Invalid ");
-                    return View("SignIn", model);
+                    return View("Login", model);
                 }
             }
-            return View("SignIn", model);
+            return View("Login", model);
         }
 
         [HttpGet]
