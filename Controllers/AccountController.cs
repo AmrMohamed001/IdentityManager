@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using Role_Identity.Enums;
 using Role_Identity.Models;
 using Role_Identity.Models.ViewModels;
 using System.ComponentModel.DataAnnotations;
@@ -16,12 +17,14 @@ namespace Role_Identity.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IEmailSender emailSender;
+        private readonly RoleManager<IdentityRole> roleManager;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender, RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.emailSender = emailSender;
+            this.roleManager = roleManager;
         }
 
         public IActionResult Error()
@@ -40,6 +43,7 @@ namespace Role_Identity.Controllers
         public IActionResult Register(string returnurl = null)
         {
             ViewData["returnurl"] = returnurl;
+            ViewBag.roles = roleManager.Roles.Select(x => new { x.Id, x.Name });
             return View("Register");
         }
 
@@ -49,6 +53,11 @@ namespace Role_Identity.Controllers
         {
             ViewData["returnurl"] = returnurl;
             returnurl = returnurl ?? Url.Content("~/");
+            //if (!roleManager.RoleExistsAsync(RolesEnum.Admin.ToString()).GetAwaiter().GetResult())
+            //{
+            //    await roleManager.CreateAsync(new IdentityRole(RolesEnum.Admin.ToString()));
+            //    await roleManager.CreateAsync(new IdentityRole(RolesEnum.Customer.ToString()));
+            //}
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser
@@ -60,6 +69,10 @@ namespace Role_Identity.Controllers
                 var result = await userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    var role = await roleManager.FindByIdAsync(model.RoleId);
+                    if (role != null && model.RoleId != null && role.Name == RolesEnum.Admin.ToString()) await userManager.AddToRoleAsync(user, RolesEnum.Admin.ToString());
+                    else await userManager.AddToRoleAsync(user, RolesEnum.Customer.ToString());
+
                     // send mail
                     var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.Action("RegisterConfirmation", "Auth", new { userId = user.Id, code }, protocol: HttpContext.Request.Scheme);
@@ -261,5 +274,22 @@ namespace Role_Identity.Controllers
             await userManager.SetTwoFactorEnabledAsync(user, false);
             return RedirectToAction("Index", "Home");
         }
+
+        public async Task<IActionResult> AddRole()
+        {
+            if (!roleManager.RoleExistsAsync(RolesEnum.Admin.ToString()).GetAwaiter().GetResult())
+            {
+                await roleManager.CreateAsync(new IdentityRole(RolesEnum.Admin.ToString()));
+                await roleManager.CreateAsync(new IdentityRole(RolesEnum.Customer.ToString()));
+            }
+            return View(nameof(AddRole));
+        }
+        [HttpGet]
+        public IActionResult AccessDenied()
+        {
+            return View("AccessDenied");
+        }
     }
+
+
 }

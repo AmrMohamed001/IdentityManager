@@ -4,44 +4,38 @@
     ViewData["Title"] = "Login";
 }
 
-<h1>Login</h1>
-
-<hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="container d-flex align-items-center justify-content-center min-vh-100">
+    <div class="card shadow-lg p-4" style="max-width: 400px; width: 100%; border-radius: 10px; background: #f9f9f9;">
+        <h2 class="text-center mb-4" style="font-family: 'Segoe UI', sans-serif; color: #333;">Welcome Back!</h2>
         <form asp-action="Login" asp-route-redirect="@ViewData["returnurl"]">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
+            <div asp-validation-summary="All" class="text-danger mb-3"></div>
+            <div class="form-group mb-3">
+                <label asp-for="Email" class="form-label" style="color: #555;">Email Address</label>
+                <input asp-for="Email" class="form-control shadow-sm" style="border-radius: 5px;" placeholder="Enter your email" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
+            <div class="form-group mb-3">
+                <label asp-for="Password" class="form-label" style="color: #555;">Password</label>
+                <input asp-for="Password" type="password" class="form-control shadow-sm" style="border-radius: 5px;" placeholder="Enter your password" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="RememberMe" /> @Html.DisplayNameFor(model => model.RememberMe)
-                </label>
+            <div class="form-group form-check mb-4">
+                <input class="form-check-input" asp-for="RememberMe" id="rememberMe" />
+                <label class="form-check-label" for="rememberMe" style="color: #555;">@Html.DisplayNameFor(model => model.RememberMe)</label>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="d-grid">
+                <input type="submit" value="Login" class="btn btn-primary shadow-sm" style="border-radius: 5px; background-color: #007bff; border: none;" />
             </div>
         </form>
+        <div class="mt-4 text-center">
+            <p style="color: #555;">Don't have an account? <a asp-controller="account" asp-action="register" asp-route-redirect="@ViewData["returnurl"]" class="text-primary" style="text-decoration: none;">Register here</a></p>
+            <p style="color: #555;"><a asp-controller="account" asp-action="ForgetPassword" class="text-primary" style="text-decoration: none;">Forgot your password?</a></p>
+        </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-4">
-        <a asp-controller="account" asp-action="register" asp-route-redirect="@ViewData["returnurl"]">Register as new user?</a>
-    </div>
-    <div class="col-md-4 text-end">
-        <a asp-controller="account" asp-action="ForgetPassword">Forget your password?</a>
-    </div>
-</div>
-
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

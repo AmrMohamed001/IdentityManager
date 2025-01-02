@@ -24,7 +24,7 @@ namespace Role_Identity.Controllers
             else ViewData["TwoFEnable"] = user.TwoFactorEnabled;
             return View();
         }
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public IActionResult Privacy()
         {
             return View();

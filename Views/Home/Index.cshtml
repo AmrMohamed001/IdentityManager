@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -16,7 +17,21 @@
         {
             <a asp-action="EnableAuthenticator" asp-controller="account">Setup your 2FA</a>
         }
-        
+
+        if (User.IsInRole(RolesEnum.Admin.ToString()))
+        {
+            <p class="text-success">Welcome - Admin</p>
+        }
+        else
+        {
+            <p class="text-success">Welcome - User</p>
+        }
+
     }
+    else
+    {
+        <p class="text-success">Welcome - Guest</p>
+    }
+    
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>

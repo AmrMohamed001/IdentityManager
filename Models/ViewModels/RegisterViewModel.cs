@@ -17,5 +17,7 @@ namespace Role_Identity.Models.ViewModels
         [Display(Name = "Confirm Password")]
         [Compare("Password", ErrorMessage = "Password dosn't match Confirm ")]
         public string ConfirmPassword { get; set; }
+
+        public string RoleId { get; set; }
     }
 }
